@@ -4,21 +4,37 @@ libcriterion = dependency(
     required: true,
 )
 
-samples = [
-    'xmacro_test.c',
-    'generic_select_test.c',
-]
+# samples = [
+#     'xmacro_test.c',
+#     'generic_select_test.c',
+#     'hash_table_test.c',
+# ]
 
-foreach sample : samples
+samples = {
+    'xmacro_test.c': {
+        'inc': lib_xmacro_api,
+        'lib': libxmacro,
+    },
+    'generic_select_test.c': {
+        'inc': lib_xmacro_api,
+        'lib': libxmacro,
+    },
+    'hash_table_test.c': {
+        'inc': lib_ht_api,
+        'lib': libht,
+    },
+}
+
+foreach name, lib : samples
     e = executable(
-        sample + '.bin',
-        sample,
+        name + '.ut',
+        name,
         dependencies: [libcriterion],
-        include_directories: [libxmacro_api],
-        link_with: [libxmacro],
+        include_directories: lib['inc'],
+        link_with: lib['lib'],
     )
     test(
-        sample,
+        name,
         e,
         args: [
             '--verbose',

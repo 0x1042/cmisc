@@ -15,7 +15,16 @@ message('compiler linker:', cc.get_linker_id())
 
 thread_dep = dependency('threads')
 
+enable_trace = get_option('trace')
+
+message('enable_trace:', enable_trace)
+
+if enable_trace
+    add_project_arguments('-DTRACE', language: 'c')
+endif
+
 subdir('src')
+subdir('hashtable')
 subdir('unittest')
 
 executable(

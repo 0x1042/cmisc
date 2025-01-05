@@ -6,17 +6,18 @@ build:
   ln -sf buildDir/compile_commands.json .
 
 asan:
-  meson setup {{target}} -Db_sanitize=address -Db_lundef=false
+  meson setup {{target}} -Db_sanitize=address -Db_lundef=false -Dtrace=true
   meson compile -C {{target}} --verbose
   ln -sf buildDir/compile_commands.json .
 
 run_test:
-    ./buildDir/unittest/xmacro_test.c.bin --verbose --full-stats
+    ./buildDir/unittest/xmacro_test.c.ut --verbose --full-stats
 
 clean:
     meson compile --clean -C {{target}}
 
 test:
+    meson setup {{target}} -Db_sanitize=address -Db_lundef=false -Dtrace=true
     meson test -C {{target}} -v
 
 scan:
