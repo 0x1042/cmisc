@@ -5,11 +5,11 @@ lib_xmacro_sources = files(
     'xmacro.h',
 )
 
-libxmacro_api = include_directories('.')
+lib_xmacro_api = include_directories('.')
 
 libxmacro = shared_library(
     'xmacro',
     lib_xmacro_sources,
-    include_directories: [libxmacro_api],
+    include_directories: [lib_xmacro_api],
     dependencies: [],
 )
