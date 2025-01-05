@@ -1,0 +1,45 @@
+name: build by meson
+
+on:
+  push:
+    paths:
+      - "**.c"
+      - "**.h"
+  pull_request:
+    paths:
+      - "**.c"
+      - "**.h"
+
+env:
+  BDIR: builddir
+
+jobs:
+  build:
+    name: Build and Test on ${{ matrix.os }} with Meson v${{ matrix.meson_version }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        meson_version: ["1.6.1"]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install dependencies
+        run: python -m pip install meson==${{ matrix.meson_version }} ninja
+
+      - name: Configure Project
+        run: meson setup ${{env.BDIR}}
+        env:
+          CC: clang
+
+      - name: Build Project
+        run: meson compile -C ${{env.BDIR}}
+
+      - name: Run Tests
+        run: meson test -C ${{env.BDIR}} -v
