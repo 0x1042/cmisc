@@ -8,6 +8,11 @@ project(
     ],
 )
 
+cc = meson.get_compiler('c')
+message('compiler:', cc.get_id())
+message('compiler version:', cc.version())
+message('compiler linker:', cc.get_linker_id())
+
 thread_dep = dependency('threads')
 
 subdir('src')

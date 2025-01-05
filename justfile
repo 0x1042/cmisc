@@ -1,13 +1,13 @@
 target := "buildDir"
 
 build:
-  meson setup {{target}}
-  meson compile -C {{target}}
+  meson setup --buildtype release -Db_lto=true -Db_lto_mode=thin -Db_pie=true {{target}}
+  meson compile -C {{target}} --verbose
   ln -sf buildDir/compile_commands.json .
 
-build_asan:
+asan:
   meson setup {{target}} -Db_sanitize=address -Db_lundef=false
-  meson compile -C {{target}}
+  meson compile -C {{target}} --verbose
   ln -sf buildDir/compile_commands.json .
 
 run_test:
